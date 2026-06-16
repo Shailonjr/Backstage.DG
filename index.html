@@ -3,144 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Backstage.DG | Red Profesional Musical</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Backstage.DG - Plataforma de Músicos</title>
+    <!-- Font Awesome para los iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="Styles/Styles.css">
 </head>
 <body>
 
+    <!-- --- CABECERA PRINCIPAL REESTRUCTURADA --- -->
     <header class="main-header">
-        <nav class="nav-container">
-            <a href="#" class="logo-link">
-                <div class="logo">Backstage<span class="logo-dg">.DG</span></div>
+        <div class="header-top-row">
+            <!-- Bloque Izquierdo: Logotipo -->
+            <a href="index.html" class="logo-link">
+                <h1 class="logo">BACKSTAGE<span class="logo-dg">.DG</span></h1>
             </a>
-            <div class="nav-wrapper">
-                <ul class="nav-menu">
-                    <li class="dropdown">
-                        <a href="javascript:void(0)" class="dropdown-trigger">Lineup <i class="fas fa-chevron-down"></i></a>
-                        <div class="dropdown-content">
-                            <a href="javascript:void(0)" onclick="filtrarLineup('Música en Vivo')">Música en Vivo</a>
-                            <a href="javascript:void(0)" onclick="filtrarLineup('Músicos de Sesión')">Músicos de Sesión</a>
-                            <a href="javascript:void(0)" onclick="filtrarLineup('Arreglistas')">Arreglistas</a>
-                            <a href="javascript:void(0)" onclick="filtrarLineup('Productores')">Productores</a>
-                            <a href="javascript:void(0)" onclick="filtrarLineup('Representantes')">Representantes</a>
-                            <a href="javascript:void(0)" onclick="filtrarLineup('todos')" style="border-top: 1px solid #333; color: #1DB954;">Ver Todos</a>
-                        </div>
-                    </li>
-                </ul>
-                
-                <div id="auth-buttons-container" style="display: flex; gap: 10px; align-items: center;">
-                    <button class="btn-login-nav" onclick="abrirModalLogin()">Iniciar Sesión</button>
-                    <button class="btn-nav-register" id="nav-btn-register" onclick="abrirModal()" style="display: none;">Registrarse</button>
+
+            <!-- Bloque Derecho Conectado: Contiene Lineup + Botón Juntos -->
+            <div class="header-right-wrapper">
+                <!-- Menú de Navegación (Lineup) -->
+                <nav class="nav-container">
+                    <div class="nav-wrapper">
+                        <ul class="nav-menu">
+                            <li class="dropdown">
+                                <a href="#" id="menu-lineup">Lineup <i class="fas fa-chevron-down"></i></a>
+                                <div class="dropdown-content">
+                                    <a href="#" data-category="todos">Todos</a>
+                                    <a href="#" data-category="musica en vivo">Música en Vivo</a>
+                                    <a href="#" data-category="compositores">Compositores</a>
+                                    <a href="#" data-category="productores">Productores</a>
+                                    <a href="#" data-category="musicos de sesion">Músicos de Sesión</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+                <!-- Contenedor Dinámico de Autenticación -->
+                <div id="auth-buttons-container">
+                    <button id="btn-login" class="btn-login-nav">Iniciar Sesión</button>
                 </div>
             </div>
-        </nav>
+        </div>
     </header>
 
-    <main>
-        <section class="hero-home">
-            <div class="hero-content">
-                <h1>Conectando el talento con las oportunidades.</h1>
-                <p>La red profesional exclusiva para la industria musical.</p>
-                <div class="hero-buttons">
-                    <a href="#explorar-seccion" class="btn-primary">Explorar Lineup</a>
-                    <button class="btn-secondary" id="hero-btn-join" onclick="abrirModal()" style="display: none;">Unirse a la Red</button>
-                </div>
-            </div>
-        </section>
-
-        <div id="session-indicator" class="session-indicator" style="display: none;"></div>
-
-        <section id="explorar-seccion" class="directory-container">
-            <h2 class="section-title">Lineup Oficial</h2>
-            <div id="cards-grid" class="cards-grid"></div>
-        </section>
-    </main>
-
-    <div id="modal-login" class="modal">
-        <div class="modal-content" style="max-width: 400px;">
-            <span class="close-modal" onclick="cerrarModalLogin()">×</span>
-            <h3>Iniciar Sesión</h3>
-            <p style="color: #888; font-size: 0.85rem; margin-bottom: 20px;">Prueba con admin@backstage.com o musico@backstage.com (Clave: 123)</p>
-            <form id="login-form">
-                <div class="form-group">
-                    <label>Correo Electrónico:</label>
-                    <input type="email" id="login-email" required>
-                </div>
-                <div class="form-group">
-                    <label>Contraseña:</label>
-                    <input type="password" id="login-password" required>
-                </div>
-                <button type="button" class="btn-save" onclick="procesarLogin()">Ingresar</button>
-            </form>
-        </div>
+    <!-- Indicador de Sesión (Se muestra dinámicamente con JS) -->
+    <div id="session-indicator" class="session-indicator" style="display: none;">
+        <span>Sesión activa como Administrador</span>
     </div>
 
-    <div id="modal-perfil" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="cerrarModal()">×</span>
-            <h3 id="modal-titulo">Perfil Profesional</h3>
-            
-            <div id="payment-notice-form" style="background: rgba(29, 185, 84, 0.1); border: 1px solid #1DB954; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 0.85rem; color: #1DB954;">
-                <i class="fas fa-info-circle"></i> <strong>Nota de activación:</strong> Al guardar, tu perfil quedará creado en modo de revisión. Recuerda reportar tu comprobante de suscripción para que sea visible públicamente en el Lineup Oficial.
-            </div>
+    <!-- --- HERO SECTION --- -->
+    <section class="hero-home">
+        <div class="hero-content">
+            <h1>Conectando el talento con las oportunidades.</h1>
+            <p>La red profesional exclusiva para la industria musical.</p>
+            <a href="#directorio" class="btn-primary">Explorar Lineup</a>
+        </div>
+    </section>
 
+    <!-- --- SECCIÓN DEL DIRECTORIO --- -->
+    <main id="directorio" class="directory-container">
+        <h2 id="dynamic-section-title" class="section-title">Lineup Oficial</h2>
+        
+        <!-- Grid dinámico donde JS inyectará las tarjetas de músicos -->
+        <div id="cards-grid" class="cards-grid">
+            <!-- Los perfiles se cargan desde script.js -->
+        </div>
+    </main>
+
+    <!-- --- MODAL PARA EDITAR / AGREGAR PERFIL --- -->
+    <div id="musician-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-modal" class="close-modal">&times;</span>
+            <h3 id="modal-title" style="margin-bottom: 20px; font-size: 1.5rem; color: #1DB954;">Editar Perfil Profesional</h3>
+            
             <form id="musician-form">
-                <input type="hidden" id="edit-index" value="-1">
+                <input type="hidden" id="form-card-id">
                 
                 <div class="form-group">
-                    <label>Foto de Perfil:</label>
-                    <input type="file" id="input-photo" accept="image/*">
+                    <label for="form-name">Nombre Artístico / Proyecto</label>
+                    <input type="text" id="form-name" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="form-role">Rol Principal</label>
+                        <select id="form-role" required>
+                            <option value="Música en Vivo">Música en Vivo</option>
+                            <option value="Compositores">Compositores</option>
+                            <option value="Productores">Productores</option>
+                            <option value="Músicos de Sesión">Músicos de Sesión</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="form-genres">Géneros (Separados por comas)</label>
+                        <input type="text" id="form-genres" placeholder="Rock, Jazz, Pop" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="form-bio">Biografía / Experiencia Breve</label>
+                    <textarea id="form-bio" rows="4" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="form-photo-url">URL de la Foto de Perfil</label>
+                    <input type="url" id="form-photo-url" placeholder="https://ejemplo.com/foto.jpg">
                     <div id="photo-preview" class="photo-preview-container"></div>
                 </div>
 
+                <div class="style-divider" style="border-top: 1px solid #333; margin: 20px 0;"></div>
+                <p style="font-size: 0.85rem; color: #888; margin-bottom: 10px; text-transform: uppercase; font-weight: 700;">Enlaces de Redes Sociales</p>
+
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Nombre:</label>
-                        <input type="text" id="name" required>
+                        <label><i class="fab fa-instagram"></i> Instagram (URL)</label>
+                        <input type="url" id="form-instagram" placeholder="https://instagram.com/...">
                     </div>
                     <div class="form-group">
-                        <label>Rol:</label>
-                        <select id="role">
-                            <option value="Música en Vivo">Música en Vivo</option>
-                            <option value="Músicos de Sesión">Músicos de Sesión</option>
-                            <option value="Arreglistas">Arreglistas</option>
-                            <option value="Productores">Productores</option>
-                            <option value="Representantes">Representantes</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label><i class="fab fa-instagram"></i> Instagram (Link):</label>
-                        <input type="url" id="link-instagram" placeholder="https://instagram.com/...">
+                        <label><i class="fab fa-spotify"></i> Spotify (URL)</label>
+                        <input type="url" id="form-spotify" placeholder="https://open.spotify.com/...">
                     </div>
                     <div class="form-group">
-                        <label><i class="fab fa-spotify"></i> Spotify (Link):</label>
-                        <input type="url" id="link-spotify" placeholder="https://open.spotify.com/...">
+                        <label><i class="fab fa-youtube"></i> YouTube (URL)</label>
+                        <input type="url" id="form-youtube" placeholder="https://youtube.com/...">
                     </div>
-                </div>
-                <div class="form-group">
-                    <label><i class="fab fa-youtube"></i> YouTube (Link):</label>
-                    <input type="url" id="link-youtube" placeholder="https://youtube.com/...">
                 </div>
 
-                <div class="form-group">
-                    <label>Biografía y Experiencia:</label>
-                    <textarea id="experience" rows="4"></textarea>
-                </div>
-                
-                <button type="button" class="btn-save" onclick="guardarMusico()">Guardar Perfil</button>
+                <button type="submit" class="btn-save" style="margin-top: 20px;">Guardar Cambios en el Lineup</button>
             </form>
         </div>
     </div>
 
+    <!-- --- FOOTER --- -->
     <footer class="main-footer">
         <div class="footer-container">
             <div class="footer-brand">
-                <div class="logo">Backstage<span class="logo-dg">.DG</span></div>
-                <p>Conectando el talento con las oportunidades.</p>
+                <h3 class="logo">BACKSTAGE<span class="logo-dg">.DG</span></h3>
+                <p>La red profesional exclusiva para la industria musical.</p>
             </div>
             <div class="footer-sponsors">
                 <h4>Patrocinadores</h4>
@@ -158,10 +158,11 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>© 2026 Backstage.DG - Todos los derechos reservados.</p>
+            <p>&copy; 2026 Backstage.DG - Todos los derechos reservados.</p>
         </div>
     </footer>
 
+    <!-- Scripts de funcionalidad -->
     <script src="script.js"></script>
 </body>
 </html>

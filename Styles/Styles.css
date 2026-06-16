@@ -1,10 +1,9 @@
 /* ==========================================================================
-   BACKSTAGE.DG - ESTILOS COMPLETOS V1.9 (CONTROL DE SUSCRIPCIÓN MENSUAL)
+   BACKSTAGE.DG - ESTILOS COMPLETOS V3.2 (MÓDULO DE CABECERA COMPACTO UNIFICADO)
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;700;900&display=swap');
 
-/* --- Reset y Estilos Base --- */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -22,24 +21,36 @@ body {
     line-height: 1.6;
 }
 
-/* --- HEADER Y NAVEGACIÓN --- */
+/* --- CABECERA PRINCIPAL --- */
 .main-header {
     background: rgba(0, 0, 0, 0.95);
     border-bottom: 1px solid #282828;
     position: sticky;
     top: 0;
     z-index: 1000;
-    min-height: 80px; /* Cambiado a min-height para permitir crecimiento dinámico en móvil */
+    width: 100%;
 }
 
-.nav-container {
+/* Distribución en PC: Logo a la izquierda, todo lo demás agrupado a la derecha */
+.header-top-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
-    height: 100%;
-    padding: 0 20px;
+    padding: 15px 20px;
+}
+
+/* Agrupa Lineup e Iniciar Sesión pegados horizontalmente en PC */
+.header-right-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 30px; /* Separación exacta entre el Lineup y el Botón */
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
 }
 
 .logo {
@@ -63,13 +74,11 @@ body {
 .nav-wrapper {
     display: flex;
     align-items: center;
-    gap: 30px;
 }
 
 .nav-menu {
     display: flex;
     list-style: none;
-    gap: 20px;
 }
 
 .nav-menu li a {
@@ -401,7 +410,7 @@ body {
     transform: scale(1.02);
 }
 
-/* --- FOOTER REORGANIZADO --- */
+/* --- FOOTER --- */
 .main-footer {
     background: #080808;
     border-top: 1px solid #282828;
@@ -477,67 +486,7 @@ body {
     font-size: 0.8rem;
 }
 
-/* [CORREGIDO] REORGANIZACIÓN TOTAL DE ADAPTABILIDAD RESPONSIVA PARA MÓVILES */
-@media (max-width: 768px) {
-    /* Ajustes generales del header en móviles */
-    .nav-container {
-        flex-direction: column;
-        padding: 15px 20px;
-        gap: 15px;
-    }
-
-    .nav-wrapper {
-        flex-direction: column;
-        gap: 15px;
-        width: 100%;
-        text-align: center;
-    }
-
-    .nav-menu {
-        padding: 0;
-        margin: 0;
-    }
-
-    .dropdown-content {
-        position: static; /* Hace que el submenú empuje el contenido hacia abajo en vez de flotar mal */
-        box-shadow: none;
-        width: 100%;
-        min-width: 260px;
-        margin-top: 10px;
-        background: #121212;
-    }
-
-    #auth-buttons-container {
-        width: 100%;
-        justify-content: center;
-    }
-
-    /* Resto de componentes adaptados */
-    .footer-container {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    .footer-social, .social-links {
-        text-align: center;
-        justify-content: center;
-    }
-    .hero-content h1 { font-size: 2rem; }
-    .form-row {
-        flex-direction: column;
-        gap: 0;
-    }
-    .card-actions {
-        flex-direction: column;
-        gap: 8px;
-    }
-    .btn-delete-card {
-        width: 100%;
-        border-radius: 25px;
-        height: 45px;
-    }
-}
-
-/* --- AUTENTICACIÓN SIMULADA V2.0 --- */
+/* --- AUTENTICACIÓN SIMULADA --- */
 .btn-login-nav {
     background: transparent;
     color: #fff;
@@ -585,11 +534,7 @@ body {
     text-align: center;
 }
 
-/* ==========================================================================
-   COMPONENTES DE CONTROL DE PAGOS Y ACTIVACIÓN MENSUAL
-   ========================================================================== */
-
-/* Etiqueta amarilla de Perfil Pendiente / Inactivo */
+/* Etiquetas de Control de Pagos */
 .card-status-badge {
     background: #ffc107;
     color: #000;
@@ -606,7 +551,6 @@ body {
     border: 1px solid #d39e00;
 }
 
-/* Botón verde para Habilitar Perfil */
 .btn-status-activate {
     flex: 1;
     background: #28a745;
@@ -625,7 +569,6 @@ body {
     transform: scale(1.05);
 }
 
-/* Botón naranja/rojo para Deshabilitar Perfil (Falta de Pago) */
 .btn-status-deactivate {
     flex: 1;
     background: #fd7e14;
@@ -642,4 +585,85 @@ body {
 .btn-status-deactivate:hover {
     background: #e66b00;
     transform: scale(1.05);
+}
+
+
+/* ==========================================================================
+   RESPONSIVE EXCLUSIVO: CAMBIOS ÚNICAMENTE VISIBLES EN MÓVILES (< 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+    
+    /* EN MÓVIL: Habilitamos el salto de línea controlado */
+    .header-top-row {
+        flex-wrap: wrap;
+        padding: 15px 20px 10px;
+    }
+
+    /* El logo se queda arriba a la izquierda */
+    .logo-link {
+        order: 1;
+    }
+
+    /* El contenedor de autenticación (Iniciar sesión) arriba a la derecha */
+    #auth-buttons-container {
+        order: 2;
+        width: auto;
+    }
+
+    /* El wrapper rompe el bloque y se tira completo en una segunda fila abajo */
+    .header-right-wrapper {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        margin-top: 12px;
+        padding-top: 10px;
+        border-top: 1px solid #1a1a1a; /* Pequeña división interna sutil */
+    }
+
+    .nav-container {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .dropdown-content {
+        position: static;
+        box-shadow: none;
+        width: 100%;
+        min-width: 260px;
+        margin-top: 10px;
+        background: #121212;
+    }
+
+    /* Ajustes adaptativos generales del cuerpo del sitio */
+    .footer-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .footer-social, .social-links {
+        text-align: center;
+        justify-content: center;
+    }
+    
+    .hero-content h1 { font-size: 2rem; }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .card-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .btn-delete-card {
+        width: 100%;
+        border-radius: 25px;
+        height: 45px;
+    }
 }

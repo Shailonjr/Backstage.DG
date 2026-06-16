@@ -8,10 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let fotoBase64 = "";
 
-    // Estado global de la sesión simulada (Guarda el usuario activo en sessionStorage)
     let usuarioActivo = JSON.parse(sessionStorage.getItem('backstage_session')) || null;
 
-    // --- PRE-CARGA DE DATOS DE PRUEBA (DATA POR DEFECTO) ---
     const inicializarDatosPorDefecto = () => {
         const datosExistentes = localStorage.getItem('backstage_pro_data');
         if (!datosExistentes) {
@@ -54,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- GESTIÓN DE MODALES ---
     window.abrirModal = () => {
         if (musicianForm) musicianForm.reset();
         document.getElementById('edit-index').value = "-1"; 
@@ -65,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
             photoPreview.style.display = 'none';
         }
         
-        // Mostrar u ocultar el aviso de pago en el formulario según el rol
         const paymentNotice = document.getElementById('payment-notice-form');
         if (paymentNotice) {
             paymentNotice.style.display = (usuarioActivo && usuarioActivo.role === "admin") ? "none" : "block";
@@ -81,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     window.cerrarModalLogin = () => modalLogin.style.display = "none";
 
-    // --- PROCESAR LOGIN SIMULADO ---
     window.procesarLogin = () => {
         const email = document.getElementById('login-email').value.trim();
         const pass = document.getElementById('login-password').value;
@@ -99,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- CIERRE DE SESIÓN CON RESETEO ESTRICTO DE PERMISOS ---
     window.cerrarSesion = () => {
         sessionStorage.removeItem('backstage_session');
         usuarioActivo = null;
@@ -113,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
         actualizarInterfazSegunRol();
     };
 
-    // --- ACTUALIZAR VISTA SEGÚN ROL ---
     window.actualizarInterfazSegunRol = () => {
         const authContainer = document.getElementById('auth-buttons-container');
         const navBtnRegister = document.getElementById('nav-btn-register');
@@ -141,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renderDirectorio(); 
     };
 
-    // --- PROCESAMIENTO DE FOTO ---
     if (inputPhoto) {
         inputPhoto.addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -157,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- RENDERIZADO DEL DIRECTORIO CON CONTROL MENSUAL ---
     window.renderDirectorio = (filtro = 'todos') => {
         const musicos = JSON.parse(localStorage.getItem('backstage_pro_data')) || [];
         cardsGrid.innerHTML = '';
@@ -230,7 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // --- GUARDAR MÚSICO ---
     window.guardarMusico = () => {
         const nombreInput = document.getElementById('name').value.trim();
         if (!nombreInput) {
@@ -286,7 +276,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- INTERRUPTOR DE ESTADO MENSUAL (HABILITAR / DESHABILITAR) ---
     window.alternarEstadoMusico = (index) => {
         let data = JSON.parse(localStorage.getItem('backstage_pro_data')) || [];
         if (data[index]) {
