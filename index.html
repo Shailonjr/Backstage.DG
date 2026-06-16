@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backstage.DG | Red Profesional Musical</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="Styles/Styles.css">
+</head>
+<body>
+
+    <!-- CABECERA Y NAVEGACIÓN -->
+    <header class="main-header">
+        <nav class="nav-container">
+            <a href="#" class="logo-link">
+                <div class="logo">Backstage<span class="logo-dg">.DG</span></div>
+            </a>
+            <div class="nav-wrapper">
+                <ul class="nav-menu">
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropdown-trigger">Lineup <i class="fas fa-chevron-down"></i></a>
+                        <div class="dropdown-content">
+                            <a href="javascript:void(0)" onclick="filtrarLineup('Música en Vivo')">Música en Vivo</a>
+                            <a href="javascript:void(0)" onclick="filtrarLineup('Músicos de Sesión')">Músicos de Sesión</a>
+                            <a href="javascript:void(0)" onclick="filtrarLineup('Arreglistas')">Arreglistas</a>
+                            <a href="javascript:void(0)" onclick="filtrarLineup('Productores')">Productores</a>
+                            <a href="javascript:void(0)" onclick="filtrarLineup('Representantes')">Representantes</a>
+                            <a href="javascript:void(0)" onclick="filtrarLineup('todos')" style="border-top: 1px solid #333; color: #1DB954;">Ver Todos</a>
+                        </div>
+                    </li>
+                </ul>
+                
+                <!-- Contenedor dinámico para botones de Login/Logout -->
+                <div id="auth-buttons-container" style="display: flex; gap: 10px; align-items: center;">
+                    <button class="btn-login-nav" onclick="abrirModalLogin()">Iniciar Sesión</button>
+                    <button class="btn-nav-register" id="nav-btn-register" onclick="abrirModal()" style="display: none;">Registrarse</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- SECCIÓN HERO -->
+        <section class="hero-home">
+            <div class="hero-content">
+                <h1>Conectando el talento con las oportunidades.</h1>
+                <p>La red profesional exclusiva para la industria musical.</p>
+                <div class="hero-buttons">
+                    <a href="#explorar-seccion" class="btn-primary">Explorar Lineup</a>
+                    <button class="btn-secondary" id="hero-btn-join" onclick="abrirModal()" style="display: none;">Unirse a la Red</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Indicador de Sesión Activa -->
+        <div id="session-indicator" class="session-indicator" style="display: none;"></div>
+
+        <!-- CONTENEDOR DEL DIRECTORIO -->
+        <section id="explorar-seccion" class="directory-container">
+            <h2 class="section-title">Lineup Oficial</h2>
+            <div id="cards-grid" class="cards-grid"></div>
+        </section>
+    </main>
+
+    <!-- MODAL DE INICIO DE SESIÓN -->
+    <div id="modal-login" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <span class="close-modal" onclick="cerrarModalLogin()">×</span>
+            <h3>Iniciar Sesión</h3>
+            <p style="color: #888; font-size: 0.85rem; margin-bottom: 20px;">Prueba con admin@backstage.com o musico@backstage.com (Clave: 123)</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Correo Electrónico:</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="button" class="btn-save" onclick="procesarLogin()">Ingresar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE PERFIL PROFESIONAL (FORMULARIO) -->
+    <div id="modal-perfil" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="cerrarModal()">×</span>
+            <h3 id="modal-titulo">Perfil Profesional</h3>
+            
+            <!-- Aviso informativo de pago para músicos -->
+            <div id="payment-notice-form" style="background: rgba(29, 185, 84, 0.1); border: 1px solid #1DB954; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 0.85rem; color: #1DB954;">
+                <i class="fas fa-info-circle"></i> <strong>Nota de activación:</strong> Al guardar, tu perfil quedará creado en modo de revisión. Recuerda reportar tu comprobante de suscripción para que sea visible públicamente en el Lineup Oficial.
+            </div>
+
+            <form id="musician-form">
+                <input type="hidden" id="edit-index" value="-1">
+                
+                <!-- Foto de Perfil -->
+                <div class="form-group">
+                    <label>Foto de Perfil:</label>
+                    <input type="file" id="input-photo" accept="image/*">
+                    <div id="photo-preview" class="photo-preview-container"></div>
+                </div>
+
+                <!-- Datos Principales -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre:</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Rol:</label>
+                        <select id="role">
+                            <option value="Música en Vivo">Música en Vivo</option>
+                            <option value="Músicos de Sesión">Músicos de Sesión</option>
+                            <option value="Arreglistas">Arreglistas</option>
+                            <option value="Productores">Productores</option>
+                            <option value="Representantes">Representantes</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Redes Sociales y Links de Portafolio -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fab fa-instagram"></i> Instagram (Link):</label>
+                        <input type="url" id="link-instagram" placeholder="https://instagram.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fab fa-spotify"></i> Spotify (Link):</label>
+                        <input type="url" id="link-spotify" placeholder="https://open.spotify.com/...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><i class="fab fa-youtube"></i> YouTube (Link):</label>
+                    <input type="url" id="link-youtube" placeholder="https://youtube.com/...">
+                </div>
+
+                <!-- Biografía / Experiencia -->
+                <div class="form-group">
+                    <label>Biografía y Experiencia:</label>
+                    <textarea id="experience" rows="4"></textarea>
+                </div>
+                
+                <button type="button" class="btn-save" onclick="guardarMusico()">Guardar Perfil</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PIE DE PÁGINA (FOOTER) -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="logo">Backstage<span class="logo-dg">.DG</span></div>
+                <p>Conectando el talento con las oportunidades.</p>
+            </div>
+            <div class="footer-sponsors">
+                <h4>Patrocinadores</h4>
+                <div class="sponsor-wrapper">
+                    <img src="./img/plectro.jpeg" alt="Plectro" class="sponsor-logo">
+                </div>
+            </div>
+            <div class="footer-social">
+                <h4>Síguenos</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-spotify"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Backstage.DG - Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
