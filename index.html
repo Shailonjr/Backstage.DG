@@ -9,7 +9,6 @@
 </head>
 <body>
 
-    <!-- CABECERA Y NAVEGACIÓN -->
     <header class="main-header">
         <nav class="nav-container">
             <a href="#" class="logo-link">
@@ -30,7 +29,6 @@
                     </li>
                 </ul>
                 
-                <!-- Contenedor dinámico para botones de Login/Logout -->
                 <div id="auth-buttons-container" style="display: flex; gap: 10px; align-items: center;">
                     <button class="btn-login-nav" onclick="abrirModalLogin()">Iniciar Sesión</button>
                     <button class="btn-nav-register" id="nav-btn-register" onclick="abrirModal()" style="display: none;">Registrarse</button>
@@ -40,7 +38,6 @@
     </header>
 
     <main>
-        <!-- SECCIÓN HERO -->
         <section class="hero-home">
             <div class="hero-content">
                 <h1>Conectando el talento con las oportunidades.</h1>
@@ -52,17 +49,14 @@
             </div>
         </section>
 
-        <!-- Indicador de Sesión Activa -->
         <div id="session-indicator" class="session-indicator" style="display: none;"></div>
 
-        <!-- CONTENEDOR DEL DIRECTORIO -->
         <section id="explorar-seccion" class="directory-container">
             <h2 class="section-title">Lineup Oficial</h2>
             <div id="cards-grid" class="cards-grid"></div>
         </section>
     </main>
 
-    <!-- MODAL DE INICIO DE SESIÓN -->
     <div id="modal-login" class="modal">
         <div class="modal-content" style="max-width: 400px;">
             <span class="close-modal" onclick="cerrarModalLogin()">×</span>
@@ -82,13 +76,11 @@
         </div>
     </div>
 
-    <!-- MODAL DE PERFIL PROFESIONAL (FORMULARIO) -->
     <div id="modal-perfil" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="cerrarModal()">×</span>
             <h3 id="modal-titulo">Perfil Profesional</h3>
             
-            <!-- Aviso informativo de pago para músicos -->
             <div id="payment-notice-form" style="background: rgba(29, 185, 84, 0.1); border: 1px solid #1DB954; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 0.85rem; color: #1DB954;">
                 <i class="fas fa-info-circle"></i> <strong>Nota de activación:</strong> Al guardar, tu perfil quedará creado en modo de revisión. Recuerda reportar tu comprobante de suscripción para que sea visible públicamente en el Lineup Oficial.
             </div>
@@ -96,14 +88,12 @@
             <form id="musician-form">
                 <input type="hidden" id="edit-index" value="-1">
                 
-                <!-- Foto de Perfil -->
                 <div class="form-group">
                     <label>Foto de Perfil:</label>
                     <input type="file" id="input-photo" accept="image/*">
                     <div id="photo-preview" class="photo-preview-container"></div>
                 </div>
 
-                <!-- Datos Principales -->
                 <div class="form-row">
                     <div class="form-group">
                         <label>Nombre:</label>
@@ -121,7 +111,6 @@
                     </div>
                 </div>
                 
-                <!-- Redes Sociales y Links de Portafolio -->
                 <div class="form-row">
                     <div class="form-group">
                         <label><i class="fab fa-instagram"></i> Instagram (Link):</label>
@@ -137,7 +126,6 @@
                     <input type="url" id="link-youtube" placeholder="https://youtube.com/...">
                 </div>
 
-                <!-- Biografía / Experiencia -->
                 <div class="form-group">
                     <label>Biografía y Experiencia:</label>
                     <textarea id="experience" rows="4"></textarea>
@@ -148,7 +136,6 @@
         </div>
     </div>
 
-    <!-- PIE DE PÁGINA (FOOTER) -->
     <footer class="main-footer">
         <div class="footer-container">
             <div class="footer-brand">

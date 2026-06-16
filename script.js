@@ -99,20 +99,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- [CORREGIDO] CIERRE DE SESIÓN CON RESETEO ESTRICTO DE PERMISOS ---
+    // --- CIERRE DE SESIÓN CON RESETEO ESTRICTO DE PERMISOS ---
     window.cerrarSesion = () => {
-        // 1. Destruir variables de sesión
         sessionStorage.removeItem('backstage_session');
         usuarioActivo = null;
         
-        // 2. Limpiar letrero indicador de forma inmediata
         const sessionIndicator = document.getElementById('session-indicator');
         if (sessionIndicator) {
             sessionIndicator.style.display = "none";
             sessionIndicator.innerText = "";
         }
 
-        // 3. Forzar actualización estructural de la UI con el rol público
         actualizarInterfazSegunRol();
     };
 
@@ -132,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if(heroBtnJoin) heroBtnJoin.style.display = "inline-block";
             
         } else {
-            // Re-inyectar botones públicos y asegurar que se oculte el de registrarse en modo visita
             authContainer.innerHTML = `
                 <button class="btn-login-nav" onclick="abrirModalLogin()">Iniciar Sesión</button>
                 <button class="btn-nav-register" id="nav-btn-register" onclick="abrirModal()" style="display: none;">Registrarse</button>
@@ -142,7 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (sessionIndicator) sessionIndicator.style.display = "none";
         }
 
-        // Re-renderizar el directorio para remover botones de edición/borrado al instante
         renderDirectorio(); 
     };
 
@@ -167,10 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const musicos = JSON.parse(localStorage.getItem('backstage_pro_data')) || [];
         cardsGrid.innerHTML = '';
 
-        // 1. Filtrar primero por categoría (Rol musical)
         let listaFiltrada = filtro === 'todos' ? musicos : musicos.filter(m => m.rol === filtro);
 
-        // 2. Aplicar filtro estricto de visibilidad pública
         listaFiltrada = listaFiltrada.filter(m => {
             if (m.aprobado === true) return true;
             
@@ -349,7 +342,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (seccionObjetivo) seccionObjetivo.scrollIntoView({ behavior: 'smooth' });
     };
 
-    // Ejecuciones de inicialización obligatorias al cargar el documento
     inicializarDatosPorDefecto();
     actualizarInterfazSegunRol();
 });
