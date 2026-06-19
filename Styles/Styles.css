@@ -1,8 +1,4 @@
-/* ==========================================================================
-   BACKSTAGE.DG - ESTILOS COMPLETOS V3.2 (MÓDULO DE CABECERA COMPACTO UNIFICADO)
-   ========================================================================== */
-
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=1,700&family=Inter:wght@400;700;900&display=swap');
 
 * {
     box-sizing: border-box;
@@ -31,7 +27,6 @@ body {
     width: 100%;
 }
 
-/* Distribución en PC: Logo a la izquierda, todo lo demás agrupado a la derecha */
 .header-top-row {
     display: flex;
     justify-content: space-between;
@@ -41,11 +36,10 @@ body {
     padding: 15px 20px;
 }
 
-/* Agrupa Lineup e Iniciar Sesión pegados horizontalmente en PC */
 .header-right-wrapper {
     display: flex;
     align-items: center;
-    gap: 30px; /* Separación exacta entre el Lineup y el Botón */
+    gap: 30px;
 }
 
 .nav-container {
@@ -126,23 +120,6 @@ body {
 .dropdown-content a:hover {
     background: #282828;
     color: #1DB954;
-}
-
-/* --- BOTONES GENERALES Y HERO --- */
-.btn-nav-register {
-    background: #1DB954;
-    color: #000;
-    border: none;
-    padding: 10px 22px;
-    border-radius: 50px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn-nav-register:hover {
-    background: #1ed760;
-    transform: scale(1.05);
 }
 
 .btn-primary, .btn-secondary {
@@ -486,7 +463,7 @@ body {
     font-size: 0.8rem;
 }
 
-/* --- AUTENTICACIÓN SIMULADA --- */
+/* --- AUTENTICACIÓN --- */
 .btn-login-nav {
     background: transparent;
     color: #fff;
@@ -497,6 +474,10 @@ body {
     cursor: pointer;
     font-size: 0.9rem;
     transition: 0.3s;
+    
+    /* Protegemos el botón para que esté arriba y reciba los clics */
+    position: relative;
+    z-index: 1010;
 }
 
 .btn-login-nav:hover {
@@ -514,6 +495,8 @@ body {
     cursor: pointer;
     font-size: 0.9rem;
     transition: 0.3s;
+    position: relative;
+    z-index: 1010;
 }
 
 .btn-logout-nav:hover {
@@ -534,7 +517,6 @@ body {
     text-align: center;
 }
 
-/* Etiquetas de Control de Pagos */
 .card-status-badge {
     background: #ffc107;
     color: #000;
@@ -587,44 +569,22 @@ body {
     transform: scale(1.05);
 }
 
-
-/* ==========================================================================
-   RESPONSIVE EXCLUSIVO: CAMBIOS ÚNICAMENTE VISIBLES EN MÓVILES (< 768px)
-   ========================================================================== */
 @media (max-width: 768px) {
-    
-    /* EN MÓVIL: Habilitamos el salto de línea controlado */
     .header-top-row {
         flex-wrap: wrap;
         padding: 15px 20px 10px;
     }
-
-    /* El logo se queda arriba a la izquierda */
-    .logo-link {
-        order: 1;
-    }
-
-    /* El contenedor de autenticación (Iniciar sesión) arriba a la derecha */
-    #auth-buttons-container {
-        order: 2;
-        width: auto;
-    }
-
-    /* El wrapper rompe el bloque y se tira completo en una segunda fila abajo */
+    .logo-link { order: 1; }
+    #auth-buttons-container { order: 2; width: auto; }
     .header-right-wrapper {
         order: 3;
         width: 100%;
         justify-content: center;
         margin-top: 12px;
         padding-top: 10px;
-        border-top: 1px solid #1a1a1a; /* Pequeña división interna sutil */
+        border-top: 1px solid #1a1a1a;
     }
-
-    .nav-container {
-        width: 100%;
-        justify-content: center;
-    }
-
+    .nav-container { width: 100%; justify-content: center; }
     .dropdown-content {
         position: static;
         box-shadow: none;
@@ -633,37 +593,15 @@ body {
         margin-top: 10px;
         background: #121212;
     }
-
-    /* Ajustes adaptativos generales del cuerpo del sitio */
-    .footer-container {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    
-    .footer-social, .social-links {
-        text-align: center;
-        justify-content: center;
-    }
-    
+    .footer-container { grid-template-columns: 1fr; text-align: center; }
+    .footer-social, .social-links { text-align: center; justify-content: center; }
     .hero-content h1 { font-size: 2rem; }
-    
-    .form-row {
-        flex-direction: column;
-        gap: 0;
-    }
-    
-    .cards-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .card-actions {
-        flex-direction: column;
-        gap: 8px;
-    }
-    
-    .btn-delete-card {
-        width: 100%;
-        border-radius: 25px;
-        height: 45px;
-    }
+    .form-row { flex-direction: column; gap: 0; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .card-actions { flex-direction: column; gap: 8px; }
+    .btn-delete-card { width: 100%; border-radius: 25px; height: 45px; }
+}
+
+.modal-login-backdrop-blur {
+    backdrop-filter: blur(6px);
 }

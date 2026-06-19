@@ -3,43 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Backstage.DG - Plataforma de Músicos</title>
-    <!-- Font Awesome para los iconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Estilos personalizados -->
+    <title>Backstage.DG - Directorio de Músicos</title>
     <link rel="stylesheet" href="Styles/Styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- --- CABECERA PRINCIPAL REESTRUCTURADA --- -->
     <header class="main-header">
         <div class="header-top-row">
-            <!-- Bloque Izquierdo: Logotipo -->
-            <a href="index.html" class="logo-link">
-                <h1 class="logo">BACKSTAGE<span class="logo-dg">.DG</span></h1>
+            <a href="#" class="logo-link">
+                <div class="logo">Backstage<span class="logo-dg">.DG</span></div>
             </a>
-
-            <!-- Bloque Derecho Conectado: Contiene Lineup + Botón Juntos -->
+            
             <div class="header-right-wrapper">
-                <!-- Menú de Navegación (Lineup) -->
                 <nav class="nav-container">
-                    <div class="nav-wrapper">
-                        <ul class="nav-menu">
-                            <li class="dropdown">
-                                <a href="#" id="menu-lineup">Lineup <i class="fas fa-chevron-down"></i></a>
-                                <div class="dropdown-content">
-                                    <a href="#" data-category="todos">Todos</a>
-                                    <a href="#" data-category="musica en vivo">Música en Vivo</a>
-                                    <a href="#" data-category="compositores">Compositores</a>
-                                    <a href="#" data-category="productores">Productores</a>
-                                    <a href="#" data-category="musicos de sesion">Músicos de Sesión</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul class="nav-menu">
+                        <li class="dropdown">
+                            <a href="#" class="nav-wrapper">Lineup <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:5px;"></i></a>
+                            <div class="dropdown-content">
+                                <a href="#" data-category="todos">Todos los Perfiles</a>
+                                <a href="#" data-category="Música en Vivo">Música en Vivo</a>
+                                <a href="#" data-category="Músicos de Sesión">Músicos de Sesión</a>
+                                <a href="#" data-category="Compositores">Compositores</a>
+                                <a href="#" data-category="Productores">Productores</a>
+                            </div>
+                        </li>
+                    </ul>
                 </nav>
 
-                <!-- Contenedor Dinámico de Autenticación -->
                 <div id="auth-buttons-container">
                     <button id="btn-login" class="btn-login-nav">Iniciar Sesión</button>
                 </div>
@@ -47,122 +38,118 @@
         </div>
     </header>
 
-    <!-- Indicador de Sesión (Se muestra dinámicamente con JS) -->
-    <div id="session-indicator" class="session-indicator" style="display: none;">
-        <span>Sesión activa como Administrador</span>
-    </div>
+    <div id="session-indicator" class="session-indicator" style="display: none;"></div>
 
-    <!-- --- HERO SECTION --- -->
     <section class="hero-home">
         <div class="hero-content">
-            <h1>Conectando el talento con las oportunidades.</h1>
-            <p>La red profesional exclusiva para la industria musical.</p>
+            <h1>Conecta con Profesionales de la Música</h1>
+            <p>El directorio definitivo para músicos de sesión, productores, compositores y artistas en vivo.</p>
             <a href="#directorio" class="btn-primary">Explorar Lineup</a>
         </div>
     </section>
 
-    <!-- --- SECCIÓN DEL DIRECTORIO --- -->
     <main id="directorio" class="directory-container">
         <h2 id="dynamic-section-title" class="section-title">Lineup Oficial</h2>
-        
-        <!-- Grid dinámico donde JS inyectará las tarjetas de músicos -->
         <div id="cards-grid" class="cards-grid">
-            <!-- Los perfiles se cargan desde script.js -->
         </div>
     </main>
 
-    <!-- --- MODAL PARA EDITAR / AGREGAR PERFIL --- -->
     <div id="musician-modal" class="modal">
         <div class="modal-content">
-            <span id="close-modal" class="close-modal">&times;</span>
-            <h3 id="modal-title" style="margin-bottom: 20px; font-size: 1.5rem; color: #1DB954;">Editar Perfil Profesional</h3>
-            
+            <span id="close-modal" class="close-modal">×</span>
+            <h2>Editar Perfil Profesional</h2>
             <form id="musician-form">
                 <input type="hidden" id="form-card-id">
-                
                 <div class="form-group">
-                    <label for="form-name">Nombre Artístico / Proyecto</label>
+                    <label>Nombre Artístico / Completo</label>
                     <input type="text" id="form-name" required>
                 </div>
-
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="form-role">Rol Principal</label>
+                        <label>Rol Principal</label>
                         <select id="form-role" required>
                             <option value="Música en Vivo">Música en Vivo</option>
+                            <option value="Músicos de Sesión">Músicos de Sesión</option>
                             <option value="Compositores">Compositores</option>
                             <option value="Productores">Productores</option>
-                            <option value="Músicos de Sesión">Músicos de Sesión</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="form-genres">Géneros (Separados por comas)</label>
-                        <input type="text" id="form-genres" placeholder="Rock, Jazz, Pop" required>
+                        <label>Géneros</label>
+                        <input type="text" id="form-genres" required>
                     </div>
                 </div>
-
                 <div class="form-group">
-                    <label for="form-bio">Biografía / Experiencia Breve</label>
+                    <label>Biografía Resumida</label>
                     <textarea id="form-bio" rows="4" required></textarea>
                 </div>
-
                 <div class="form-group">
-                    <label for="form-photo-url">URL de la Foto de Perfil</label>
-                    <input type="url" id="form-photo-url" placeholder="https://ejemplo.com/foto.jpg">
+                    <label>URL de Foto de Perfil</label>
+                    <input type="url" id="form-photo-url">
                     <div id="photo-preview" class="photo-preview-container"></div>
                 </div>
-
-                <div class="style-divider" style="border-top: 1px solid #333; margin: 20px 0;"></div>
-                <p style="font-size: 0.85rem; color: #888; margin-bottom: 10px; text-transform: uppercase; font-weight: 700;">Enlaces de Redes Sociales</p>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label><i class="fab fa-instagram"></i> Instagram (URL)</label>
-                        <input type="url" id="form-instagram" placeholder="https://instagram.com/...">
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fab fa-spotify"></i> Spotify (URL)</label>
-                        <input type="url" id="form-spotify" placeholder="https://open.spotify.com/...">
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fab fa-youtube"></i> YouTube (URL)</label>
-                        <input type="url" id="form-youtube" placeholder="https://youtube.com/...">
-                    </div>
+                <div class="form-group">
+                    <label>Instagram</label>
+                    <input type="url" id="form-instagram">
                 </div>
-
-                <button type="submit" class="btn-save" style="margin-top: 20px;">Guardar Cambios en el Lineup</button>
+                <div class="form-group">
+                    <label>Spotify</label>
+                    <input type="url" id="form-spotify">
+                </div>
+                <div class="form-group">
+                    <label>YouTube</label>
+                    <input type="url" id="form-youtube">
+                </div>
+                <button type="submit" class="btn-save">Guardar Cambios</button>
             </form>
         </div>
     </div>
 
-    <!-- --- FOOTER --- -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <span id="close-login-modal" class="close-modal">×</span>
+            <div style="color: #1DB954; font-size: 2.5rem; margin-bottom: 15px;">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <h2 style="margin-bottom: 5px; font-size: 1.5rem;">Acceso Backstage</h2>
+            <p style="color: #888; font-size: 0.85rem; margin-bottom: 25px;">Ingresa tus credenciales de usuario</p>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-username"><i class="fas fa-user" style="color: #1DB954; margin-right: 5px;"></i> Usuario</label>
+                    <input type="text" id="login-username" required style="margin-top: 5px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 25px;">
+                    <label for="login-password"><i class="fas fa-lock" style="color: #1DB954; margin-right: 5px;"></i> Contraseña</label>
+                    <input type="password" id="login-password" required style="margin-top: 5px;">
+                </div>
+                <button type="submit" class="btn-save" style="background: #1DB954; font-weight: 800;">Entrar</button>
+            </form>
+        </div>
+    </div>
+
     <footer class="main-footer">
         <div class="footer-container">
             <div class="footer-brand">
-                <h3 class="logo">BACKSTAGE<span class="logo-dg">.DG</span></h3>
-                <p>La red profesional exclusiva para la industria musical.</p>
+                <div class="logo">Backstage<span class="logo-dg">.DG</span></div>
+                <p>Plataforma de vinculación y portafolios para el ecosistema musical profesional.</p>
             </div>
             <div class="footer-sponsors">
-                <h4>Patrocinadores</h4>
-                <div class="sponsor-wrapper">
-                    <img src="./img/plectro.jpeg" alt="Plectro" class="sponsor-logo">
-                </div>
+                <h4>Sponsors Oficiales</h4>
+                <img src="https://via.placeholder.com/80x30/ffffff/000000?text=AUDIO" alt="Sponsor" class="sponsor-logo">
             </div>
             <div class="footer-social">
-                <h4>Síguenos</h4>
                 <div class="social-links">
                     <a href="#"><i class="fab fa-instagram"></i></a>
                     <a href="#"><i class="fab fa-spotify"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 Backstage.DG - Todos los derechos reservados.</p>
+            <p>© 2026 Backstage.DG. Todos los derechos reservados.</p>
         </div>
     </footer>
 
-    <!-- Scripts de funcionalidad -->
     <script src="script.js"></script>
 </body>
 </html>
