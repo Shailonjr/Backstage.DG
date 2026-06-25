@@ -40,6 +40,11 @@
 
     <div id="session-indicator" class="session-indicator" style="display: none;"></div>
 
+    <!-- Contenedor para acciones de creación (Solo visible para Admin y Músico logueados) -->
+    <div id="admin-actions-bar" style="max-width: 1200px; margin: 20px auto 0; padding: 0 20px; display: none; text-align: right;">
+        <button id="btn-create-profile" class="btn-primary" style="margin: 0; padding: 10px 25px; font-size: 0.9rem;"><i class="fas fa-plus-circle"></i> Crear Nuevo Perfil</button>
+    </div>
+
     <section class="hero-home">
         <div class="hero-content">
             <h1>Profesionales de la Música</h1>
@@ -57,37 +62,37 @@
     <div id="musician-modal" class="modal">
         <div class="modal-content">
             <span id="close-modal" class="close-modal">×</span>
-            <h2>Editar Perfil Profesional</h2>
+            <h2 id="modal-title">Editar Perfil Profesional</h2>
             <form id="musician-form">
                 <input type="hidden" id="form-card-id">
+                
+                <!-- Foto de perfil arriba del todo con opción de subir archivo -->
+                <div class="form-group" style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 25px;">
+                    <label style="font-weight: 700; width: 100%; text-align: left;">Foto de Perfil Profesional</label>
+                    <div id="photo-preview" class="photo-preview-container" style="margin: 0; width: 120px; height: 120px; border-radius: 50%; background-size: cover; background-position: center; border: 3px solid #1DB954; background-image: url('https://via.placeholder.com/150'); display: block;"></div>
+                    <input type="file" id="form-photo-file" accept="image/*" style="padding: 5px; background: transparent; border: none; font-size: 0.85rem; color: #b3b3b3;">
+                </div>
+
                 <div class="form-group">
                     <label>Nombre Artístico / Completo</label>
                     <input type="text" id="form-name" required>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Rol Principal</label>
-                        <select id="form-role" required>
-                            <option value="Música en Vivo">Música en Vivo</option>
-                            <option value="Músicos de Sesión">Músicos de Sesión</option>
-                            <option value="Compositores">Compositores</option>
-                            <option value="Productores">Productores</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Géneros</label>
-                        <input type="text" id="form-genres" required>
-                    </div>
+                
+                <div class="form-group">
+                    <label>Rol Principal</label>
+                    <select id="form-role" required>
+                        <option value="Música en Vivo">Música en Vivo</option>
+                        <option value="Músicos de Sesión">Músicos de Sesión</option>
+                        <option value="Compositores">Compositores</option>
+                        <option value="Productores">Productores</option>
+                    </select>
                 </div>
+
                 <div class="form-group">
                     <label>Biografía Resumida</label>
                     <textarea id="form-bio" rows="4" required></textarea>
                 </div>
-                <div class="form-group">
-                    <label>URL de Foto de Perfil</label>
-                    <input type="url" id="form-photo-url">
-                    <div id="photo-preview" class="photo-preview-container"></div>
-                </div>
+                
                 <div class="form-group">
                     <label>Instagram</label>
                     <input type="url" id="form-instagram">
@@ -100,7 +105,7 @@
                     <label>YouTube</label>
                     <input type="url" id="form-youtube">
                 </div>
-                <button type="submit" class="btn-save">Guardar Cambios</button>
+                <button type="submit" class="btn-save" id="btn-submit-form">Guardar Cambios</button>
             </form>
         </div>
     </div>
@@ -128,14 +133,14 @@
         </div>
     </div>
 
-    <footer class="main-footer">
+    <footer class="main-header" style="background: #080808; border-top: 1px solid #282828; padding: 60px 0 30px; margin-top: 80px;">
         <div class="footer-container">
             <div class="footer-brand">
                 <div class="logo">Backstage<span class="logo-dg">.DG</span></div>
                 <p>Conectando el talento con las oportunidades</p>
             </div>
             <div class="footer-sponsors">
-                <h4>Patrocinadores</h4>
+                <h4 style="margin-bottom: 15px; text-transform: uppercase; font-size: 0.8rem; color: #b3b3b3; letter-spacing: 1px;">Patrocinadores</h4>
                 <img src="img/plectro.jpeg" alt="Sponsor" class="sponsor-logo">
             </div>
             <div class="footer-social">

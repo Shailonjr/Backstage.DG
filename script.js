@@ -1,14 +1,13 @@
 /* ==========================================================================
-   BACKSTAGE.DG - LOGICA DE FUNCIONALIDAD COMPLETA (VERSIÓN 1.5 - FILTRO INTELIGENTE)
+   BACKSTAGE.DG - LOGICA DE FUNCIONALIDAD COMPLETA (VERSIÓN 1.6)
    ========================================================================== */
 
-// Base de datos simulada de músicos
+// Base de datos simulada de músicos (Se removió la propiedad 'genres' de todos)
 let musiciansData = [
     {
         id: 1,
         name: "Carlos Delgado",
         role: "Música en Vivo",
-        genres: "Rock, Blues",
         bio: "Guitarrista y vocalista con más de 10 años de experiencia en bandas de circuito nacional. Especialista en directos de alta energía.",
         photo: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=400&q=80",
         instagram: "https://instagram.com",
@@ -20,7 +19,6 @@ let musiciansData = [
         id: 2,
         name: "Elena Rossi",
         role: "Compositores",
-        genres: "Cinematográfico, Clásica Contemporánea",
         bio: "Compositora y arreglista enfocada en bandas sonoras para cortometrajes y piezas publicitarias emocionales.",
         photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
         instagram: "https://instagram.com",
@@ -32,19 +30,17 @@ let musiciansData = [
         id: 3,
         name: "David Funk",
         role: "Productores",
-        genres: "Funk, Pop, Hip-Hop",
         bio: "Productor e ingeniero de mezcla en constante búsqueda de sonidos groove y ritmos modernos. Dueño de Groove Studio.",
         photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
         instagram: "",
         spotify: "https://spotify.com",
         youtube: "https://youtube.com",
-        active: false // Este perfil nacerá oculto para el público, visible solo para admin
+        active: false
     },
     {
         id: 4,
         name: "Sofía Martínez",
         role: "Músicos de Sesión",
-        genres: "Jazz, Funk, Pop",
         bio: "Bajista profesional egresada de conservatorio. Disponible para grabaciones de estudio remotas y giras internacionales.",
         photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80",
         instagram: "https://instagram.com",
@@ -63,6 +59,7 @@ const validUsers = {
 // Variables globales de control de estado y sesión de usuarios
 let currentFilter = "todos";
 let currentUserRole = "invitado"; 
+let currentPhotoBase64 = ""; // Almacenará temporalmente la imagen subida
 
 // Nodos principales del DOM
 const cardsGrid = document.getElementById('cards-grid');
@@ -70,12 +67,16 @@ const dynamicTitle = document.getElementById('dynamic-section-title');
 const lineupDropdownLinks = document.querySelectorAll('.dropdown-content a');
 const authContainer = document.getElementById('auth-buttons-container');
 const sessionIndicator = document.getElementById('session-indicator');
+const adminActionsBar = document.getElementById('admin-actions-bar');
+const btnCreateProfile = document.getElementById('btn-create-profile');
 
 // Nodos del Formulario y Modal de Perfiles
 const modal = document.getElementById('musician-modal');
+const modalTitle = document.getElementById('modal-title');
+const btnSubmitForm = document.getElementById('btn-submit-form');
 const closeModalBtn = document.getElementById('close-modal');
 const musicianForm = document.getElementById('musician-form');
-const photoInput = document.getElementById('form-photo-url');
+const photoFileInput = document.getElementById('form-photo-file');
 const photoPreview = document.getElementById('photo-preview');
 
 // Nodos del Modal de Login
@@ -92,14 +93,10 @@ function renderDirectory() {
     if (!cardsGrid) return;
     cardsGrid.innerHTML = '';
 
-    // Filtrado inteligente: oculta los pausados para el público, pero los muestra al admin
     const filteredData = musiciansData.filter(musico => {
-        // Si el usuario NO es administrador y el perfil está pausado, se elimina de la lista visual
         if (currentUserRole !== "admin" && !musico.active) {
             return false;
         }
-
-        // Aplicar el filtro de categorías del menú Lineup
         if (currentFilter === "todos") return true;
         
         const rRol = musico.role.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -116,7 +113,6 @@ function renderDirectory() {
         const card = document.createElement('div');
         card.className = 'musician-card';
         
-        // El administrador ve los perfiles pausados con una opacidad reducida
         if (!musico.active) {
             card.style.opacity = "0.45";
             card.style.border = "1px dashed #fd7e14";
@@ -167,8 +163,7 @@ function renderDirectory() {
             ${statusBadgeHtml}
             <div class="card-photo" style="background-image: url('${musico.photo || 'https://via.placeholder.com/150'}')"></div>
             <span class="card-role">${musico.role}</span>
-            <h3 class="card-name">${musico.name}</h3>
-            <p style="font-size: 0.8rem; color: #888; margin-bottom: 12px; font-weight:600;">${musico.genres}</p>
+            <h3 class="card-name" style="margin-bottom: 12px;">${musico.name}</h3>
             <div class="card-bio-container">
                 <p class="card-bio">${musico.bio}</p>
             </div>
@@ -187,7 +182,6 @@ function renderDirectory() {
 lineupDropdownLinks.forEach(link => {
     link.addEventListener('click', (event) => {
         event.preventDefault();
-        
         const selectedCategory = link.getAttribute('data-category');
         if (!selectedCategory) return;
 
@@ -203,17 +197,19 @@ lineupDropdownLinks.forEach(link => {
 });
 
 /* ==========================================================================
-   3. GESTIÓN DE AUTENTICACIÓN (ESCUCHA GLOBAL DIRECTA)
+   3. GESTIÓN DE AUTENTICACIÓN
    ========================================================================== */
 function setupAuthUI() {
-    if (!authContainer || !sessionIndicator) return;
+    if (!authContainer || !sessionIndicator || !adminActionsBar) return;
 
     if (currentUserRole === "invitado") {
         authContainer.innerHTML = `<button id="btn-login" class="btn-login-nav">Iniciar Sesión</button>`;
         sessionIndicator.style.display = 'none';
+        adminActionsBar.style.display = 'none';
     } else {
         authContainer.innerHTML = `<button id="btn-logout" class="btn-logout-nav">Cerrar Sesión</button>`;
         sessionIndicator.style.display = 'block';
+        adminActionsBar.style.display = 'block';
 
         if (currentUserRole === "admin") {
             sessionIndicator.textContent = "Sesión activa como Administrador";
@@ -225,7 +221,6 @@ function setupAuthUI() {
     }
 }
 
-// Captura de clics globales para autenticación
 document.addEventListener('click', function(event) {
     if (event.target && event.target.id === 'btn-login') {
         if (loginModal) {
@@ -233,11 +228,10 @@ document.addEventListener('click', function(event) {
             loginModal.classList.add('modal-login-backdrop-blur');
         }
     }
-    
     if (event.target && event.target.id === 'btn-logout') {
         currentUserRole = "invitado";
         setupAuthUI();
-        renderDirectory(); // Al volver a ser invitado, se ocultan los perfiles inactivos automáticamente
+        renderDirectory(); 
     }
 });
 
@@ -252,7 +246,7 @@ if (loginForm) {
             loginModal.style.display = 'none';
             loginForm.reset();
             setupAuthUI();
-            renderDirectory(); // Renderiza de nuevo para aplicar reglas visuales del nuevo rol
+            renderDirectory(); 
         } else {
             alert("Usuario o contraseña incorrectos. Inténtalo de nuevo.");
         }
@@ -267,28 +261,54 @@ if (closeLoginModalBtn) {
 }
 
 /* ==========================================================================
-   4. GESTIÓN OPERATIVA DE PERFILES (EDITAR, ELIMINAR, ESTADOS)
+   4. GESTIÓN OPERATIVA DE PERFILES (CON CARGA DE ARCHIVO LOCAL)
    ========================================================================== */
+
+// Detectar y procesar la subida del archivo de imagen local
+if (photoFileInput) {
+    photoFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                currentPhotoBase64 = event.target.result; // Imagen cargada en formato Base64
+                photoPreview.style.backgroundImage = `url('${currentPhotoBase64}')`;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+if (btnCreateProfile) {
+    btnCreateProfile.addEventListener('click', () => {
+        musicianForm.reset();
+        document.getElementById('form-card-id').value = ''; 
+        currentPhotoBase64 = ""; // Resetear imagen temporal
+        modalTitle.textContent = "Crear Nuevo Perfil Profesional";
+        btnSubmitForm.textContent = "Publicar Perfil";
+        photoPreview.style.backgroundImage = "url('https://via.placeholder.com/150')";
+        modal.style.display = 'block';
+    });
+}
+
 function openEditModal(id) {
     const musico = musiciansData.find(m => m.id === id);
     if (!musico) return;
 
+    modalTitle.textContent = "Editar Perfil Profesional";
+    btnSubmitForm.textContent = "Guardar Cambios";
+
     document.getElementById('form-card-id').value = musico.id;
     document.getElementById('form-name').value = musico.name;
     document.getElementById('form-role').value = musico.role;
-    document.getElementById('form-genres').value = musico.genres;
     document.getElementById('form-bio').value = musico.bio;
-    document.getElementById('form-photo-url').value = musico.photo;
     document.getElementById('form-instagram').value = musico.instagram;
     document.getElementById('form-spotify').value = musico.spotify;
     document.getElementById('form-youtube').value = musico.youtube;
 
-    if (musico.photo) {
-        photoPreview.style.backgroundImage = `url('${musico.photo}')`;
-        photoPreview.style.display = 'block';
-    } else {
-        photoPreview.style.display = 'none';
-    }
+    // Asignar foto existente a la variable temporal de control
+    currentPhotoBase64 = musico.photo || "https://via.placeholder.com/150";
+    photoPreview.style.backgroundImage = `url('${currentPhotoBase64}')`;
 
     modal.style.display = 'block';
 }
@@ -300,38 +320,54 @@ if (closeModalBtn) {
     });
 }
 
-if (photoInput) {
-    photoInput.addEventListener('input', () => {
-        const url = photoInput.value.trim();
-        if (url) {
-            photoPreview.style.backgroundImage = `url('${url}')`;
-            photoPreview.style.display = 'block';
-        } else {
-            photoPreview.style.display = 'none';
-        }
-    });
-}
-
 if (musicianForm) {
     musicianForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const id = parseInt(document.getElementById('form-card-id').value);
-        const index = musiciansData.findIndex(m => m.id === id);
+        const idField = document.getElementById('form-card-id').value;
 
-        if (index !== -1) {
-            musiciansData[index].name = document.getElementById('form-name').value.trim();
-            musiciansData[index].role = document.getElementById('form-role').value;
-            musiciansData[index].genres = document.getElementById('form-genres').value.trim();
-            musiciansData[index].bio = document.getElementById('form-bio').value.trim();
-            musiciansData[index].photo = document.getElementById('form-photo-url').value.trim();
-            musiciansData[index].instagram = document.getElementById('form-instagram').value.trim();
-            musiciansData[index].spotify = document.getElementById('form-spotify').value.trim();
-            musiciansData[index].youtube = document.getElementById('form-youtube').value.trim();
+        const name = document.getElementById('form-name').value.trim();
+        const role = document.getElementById('form-role').value;
+        const bio = document.getElementById('form-bio').value.trim();
+        const instagram = document.getElementById('form-instagram').value.trim();
+        const spotify = document.getElementById('form-spotify').value.trim();
+        const youtube = document.getElementById('form-youtube').value.trim();
+        
+        // Si no subió una foto nueva, se deja un placeholder genérico por seguridad
+        const photoToSave = currentPhotoBase64 || "https://via.placeholder.com/150";
 
-            modal.style.display = 'none';
-            musicianForm.reset();
-            renderDirectory();
+        if (idField === '') {
+            const newId = musiciansData.length > 0 ? Math.max(...musiciansData.map(m => m.id)) + 1 : 1;
+            const newMusician = {
+                id: newId,
+                name,
+                role,
+                bio,
+                photo: photoToSave,
+                instagram,
+                spotify,
+                youtube,
+                active: true
+            };
+            musiciansData.push(newMusician);
+        } else {
+            const id = parseInt(idField);
+            const index = musiciansData.findIndex(m => m.id === id);
+
+            if (index !== -1) {
+                musiciansData[index].name = name;
+                musiciansData[index].role = role;
+                musiciansData[index].bio = bio;
+                musiciansData[index].photo = photoToSave;
+                musiciansData[index].instagram = instagram;
+                musiciansData[index].spotify = spotify;
+                musiciansData[index].youtube = youtube;
+            }
         }
+
+        modal.style.display = 'none';
+        musicianForm.reset();
+        currentPhotoBase64 = ""; // Limpiar estado de memoria
+        renderDirectory();
     });
 }
 
@@ -339,7 +375,7 @@ function toggleProfileStatus(id, status) {
     const musico = musiciansData.find(m => m.id === id);
     if (musico) {
         musico.active = status;
-        renderDirectory(); // Vuelve a dibujar el directorio aplicando los nuevos criterios de visibilidad
+        renderDirectory();
     }
 }
 
@@ -361,7 +397,6 @@ window.addEventListener('click', (e) => {
     }
 });
 
-// Inicialización de la App al cargar el documento
 document.addEventListener('DOMContentLoaded', () => {
     setupAuthUI();
     renderDirectory();
