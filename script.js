@@ -1,15 +1,16 @@
 /* ==========================================================================
-   BACKSTAGE.DG - LOGICA DE FUNCIONALIDAD COMPLETA (VERSIÓN 1.6)
+   BACKSTAGE.DG - LOGICA DE FUNCIONALIDAD COMPLETA (VERSIÓN 1.8)
    ========================================================================== */
 
-// Base de datos simulada de músicos (Se removió la propiedad 'genres' de todos)
+// Base de datos simulada de músicos - Actualizada para presentación profesional
 let musiciansData = [
     {
         id: 1,
         name: "Carlos Delgado",
+        phone: "+57 300 555 1234",
         role: "Música en Vivo",
-        bio: "Guitarrista y vocalista con más de 10 años de experiencia en bandas de circuito nacional. Especialista en directos de alta energía.",
-        photo: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=400&q=80",
+        bio: "Guitarrista y vocalista con más de 10 años de trayectoria en circuitos de rock y pop nacional. Especialista en shows en vivo de alta energía y ensambles acústicos corporativos.",
+        photo: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=500&q=80",
         instagram: "https://instagram.com",
         spotify: "https://spotify.com",
         youtube: "https://youtube.com",
@@ -18,9 +19,10 @@ let musiciansData = [
     {
         id: 2,
         name: "Elena Rossi",
+        phone: "+57 315 444 5678",
         role: "Compositores",
-        bio: "Compositora y arreglista enfocada en bandas sonoras para cortometrajes y piezas publicitarias emocionales.",
-        photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+        bio: "Compositora, arreglista y pianista enfocada en la creación de bandas sonoras para cortometrajes, piezas teatrales y diseño sonoro para marcas comerciales de alto impacto.",
+        photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80",
         instagram: "https://instagram.com",
         spotify: "https://spotify.com",
         youtube: "",
@@ -29,20 +31,22 @@ let musiciansData = [
     {
         id: 3,
         name: "David Funk",
+        phone: "+57 321 777 9012",
         role: "Productores",
-        bio: "Productor e ingeniero de mezcla en constante búsqueda de sonidos groove y ritmos modernos. Dueño de Groove Studio.",
-        photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
-        instagram: "",
+        bio: "Productor musical e ingeniero de mezcla independiente. Especializado en géneros urbanos, funk y ritmos latinos modernos. Fundador y director técnico en Groove Studio.",
+        photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80",
+        instagram: "https://instagram.com",
         spotify: "https://spotify.com",
         youtube: "https://youtube.com",
-        active: false
+        active: true // Lo dejamos activo para que se vea completo en la presentación inicial
     },
     {
         id: 4,
         name: "Sofía Martínez",
+        phone: "+57 311 888 3456",
         role: "Músicos de Sesión",
-        bio: "Bajista profesional egresada de conservatorio. Disponible para grabaciones de estudio remotas y giras internacionales.",
-        photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80",
+        bio: "Bajista profesional egresada de conservatorio. Amplia experiencia en grabaciones de estudio tanto remotas como presenciales, y acompañamiento en giras de artistas internacionales.",
+        photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=500&q=80",
         instagram: "https://instagram.com",
         spotify: "",
         youtube: "https://youtube.com",
@@ -59,7 +63,7 @@ const validUsers = {
 // Variables globales de control de estado y sesión de usuarios
 let currentFilter = "todos";
 let currentUserRole = "invitado"; 
-let currentPhotoBase64 = ""; // Almacenará temporalmente la imagen subida
+let currentPhotoBase64 = ""; 
 
 // Nodos principales del DOM
 const cardsGrid = document.getElementById('cards-grid');
@@ -159,11 +163,14 @@ function renderDirectory() {
             `;
         }
 
+        let phoneHtml = musico.phone ? `<p class="card-phone" style="font-size: 0.85rem; color: #b3b3b3; margin-bottom: 12px;"><i class="fas fa-phone-alt" style="color: #1DB954; margin-right: 5px;"></i> ${musico.phone}</p>` : '';
+
         card.innerHTML = `
             ${statusBadgeHtml}
             <div class="card-photo" style="background-image: url('${musico.photo || 'https://via.placeholder.com/150'}')"></div>
             <span class="card-role">${musico.role}</span>
-            <h3 class="card-name" style="margin-bottom: 12px;">${musico.name}</h3>
+            <h3 class="card-name" style="margin-bottom: 4px;">${musico.name}</h3>
+            ${phoneHtml}
             <div class="card-bio-container">
                 <p class="card-bio">${musico.bio}</p>
             </div>
@@ -263,15 +270,13 @@ if (closeLoginModalBtn) {
 /* ==========================================================================
    4. GESTIÓN OPERATIVA DE PERFILES (CON CARGA DE ARCHIVO LOCAL)
    ========================================================================== */
-
-// Detectar y procesar la subida del archivo de imagen local
 if (photoFileInput) {
     photoFileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = function(event) {
-                currentPhotoBase64 = event.target.result; // Imagen cargada en formato Base64
+                currentPhotoBase64 = event.target.result; 
                 photoPreview.style.backgroundImage = `url('${currentPhotoBase64}')`;
             };
             reader.readAsDataURL(file);
@@ -283,7 +288,7 @@ if (btnCreateProfile) {
     btnCreateProfile.addEventListener('click', () => {
         musicianForm.reset();
         document.getElementById('form-card-id').value = ''; 
-        currentPhotoBase64 = ""; // Resetear imagen temporal
+        currentPhotoBase64 = ""; 
         modalTitle.textContent = "Crear Nuevo Perfil Profesional";
         btnSubmitForm.textContent = "Publicar Perfil";
         photoPreview.style.backgroundImage = "url('https://via.placeholder.com/150')";
@@ -300,13 +305,13 @@ function openEditModal(id) {
 
     document.getElementById('form-card-id').value = musico.id;
     document.getElementById('form-name').value = musico.name;
+    document.getElementById('form-phone').value = musico.phone || '';
     document.getElementById('form-role').value = musico.role;
     document.getElementById('form-bio').value = musico.bio;
     document.getElementById('form-instagram').value = musico.instagram;
     document.getElementById('form-spotify').value = musico.spotify;
     document.getElementById('form-youtube').value = musico.youtube;
 
-    // Asignar foto existente a la variable temporal de control
     currentPhotoBase64 = musico.photo || "https://via.placeholder.com/150";
     photoPreview.style.backgroundImage = `url('${currentPhotoBase64}')`;
 
@@ -326,13 +331,13 @@ if (musicianForm) {
         const idField = document.getElementById('form-card-id').value;
 
         const name = document.getElementById('form-name').value.trim();
+        const phone = document.getElementById('form-phone').value.trim();
         const role = document.getElementById('form-role').value;
         const bio = document.getElementById('form-bio').value.trim();
         const instagram = document.getElementById('form-instagram').value.trim();
         const spotify = document.getElementById('form-spotify').value.trim();
         const youtube = document.getElementById('form-youtube').value.trim();
         
-        // Si no subió una foto nueva, se deja un placeholder genérico por seguridad
         const photoToSave = currentPhotoBase64 || "https://via.placeholder.com/150";
 
         if (idField === '') {
@@ -340,6 +345,7 @@ if (musicianForm) {
             const newMusician = {
                 id: newId,
                 name,
+                phone,
                 role,
                 bio,
                 photo: photoToSave,
@@ -355,6 +361,7 @@ if (musicianForm) {
 
             if (index !== -1) {
                 musiciansData[index].name = name;
+                musiciansData[index].phone = phone;
                 musiciansData[index].role = role;
                 musiciansData[index].bio = bio;
                 musiciansData[index].photo = photoToSave;
@@ -366,7 +373,7 @@ if (musicianForm) {
 
         modal.style.display = 'none';
         musicianForm.reset();
-        currentPhotoBase64 = ""; // Limpiar estado de memoria
+        currentPhotoBase64 = ""; 
         renderDirectory();
     });
 }
